@@ -1,0 +1,38 @@
+const Product = require('../models/Product');
+
+exports.createProduct = async (req, res) => {
+  try {
+    const product = new Product(req.body);
+    await product.save();
+    res.status(201).json({ msg: 'Product created', product });
+  } catch (err) {
+    res.status(500).json({ msg: 'Error', error: err.message });
+  }
+};
+
+exports.getProducts = async (req, res) => {
+  try {
+    const products = await Product.find();
+    res.json(products);
+  } catch (err) {
+    res.status(500).json({ msg: 'Error', error: err.message });
+  }
+};
+
+exports.updateProduct = async (req, res) => {
+  try {
+    const updated = await Product.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    res.json({ msg: 'Updated', updated });
+  } catch (err) {
+    res.status(500).json({ msg: 'Error', error: err.message });
+  }
+};
+
+exports.deleteProduct = async (req, res) => {
+  try {
+    await Product.findByIdAndDelete(req.params.id);
+    res.json({ msg: 'Deleted' });
+  } catch (err) {
+    res.status(500).json({ msg: 'Error', error: err.message });
+  }
+};
