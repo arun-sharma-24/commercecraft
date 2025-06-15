@@ -1,15 +1,22 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
 const {
   createProduct,
-  getProducts,
+  getAllProducts,
+  getProductById,
   updateProduct,
-  deleteProduct
-} = require('../controllers/productController');
+  deleteProduct,
+} = require("../controllers/productController");
 
-router.post('/', createProduct);
-router.get('/', getProducts);
-router.put('/:id', updateProduct);
-router.delete('/:id', deleteProduct);
+const protect = require("../middleware/authMiddleware");
+
+// Public route
+router.get("/", getAllProducts);
+router.get("/:id", getProductById);
+
+// Protected routes
+router.post("/", protect, createProduct);
+router.put("/:id", protect, updateProduct);
+router.delete("/:id", protect, deleteProduct);
 
 module.exports = router;
